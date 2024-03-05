@@ -1,59 +1,49 @@
 ## Secure LoginPage
 
-Este projeto consiste em uma página de login segura, desenvolvida utilizando HTML, CSS e PHP. Ele inclui funcionalidades de autenticação e verificações de segurança para proteger contra ataques comuns, como SQL Injection e Cross-Site Scripting (XSS).
+This project consists of a secure login page, developed using HTML, CSS, and PHP. It includes authentication functionalities and security checks to protect against common attacks like SQL Injection and Cross-Site Scripting (XSS).
 
-### Funcionalidades
+### Features
 
-- **Autenticação segura**: As credenciais de login são verificadas no lado do servidor para garantir a segurança.
-- **Proteção contra ataques**: O código PHP inclui verificações para bloquear caracteres específicos que podem ser usados em ataques, como SQL Injection.
-- **Hashing de senha**: As senhas são armazenadas no banco de dados de forma segura, usando a função `password_hash`.
-- **Sessões seguras**: O PHP utiliza sessões para manter a autenticação do usuário de forma segura durante a navegação.
+- **Secure authentication**: Login credentials are verified on the server-side to ensure security.
+- **Protection against attacks**: The PHP code includes checks to block specific characters that can be used in attacks, such as SQL Injection.
+- **Password hashing**: Passwords are stored securely in the database using the `password_hash` function.
+- **Secure sessions**: PHP utilizes sessions to securely maintain user authentication during navigation.
 
-### Iniciar a sessão e incluir o arquivo de conexão
+### Starting the session and including the connection file
 
-O código começa iniciando a sessão PHP para gerenciar variáveis de sessão e inclui o arquivo `connect.php`, que contém as configurações de conexão com o banco de dados.
+The code starts by initializing the PHP session to manage session variables and includes the `connect.php` file, which contains the database connection settings.
 
-### Verificar se o método da requisição é POST
+### Checking if the request method is POST
 
-É verificado se o formulário foi submetido usando o método POST.
+It verifies if the form was submitted using the POST method.
 
-### Validação dos campos de entrada
+### Validation of input fields
 
-- Verifica se os campos de email e senha não estão vazios.
-- Filtra e sanitiza o email usando `filter_input` e `sanitizeInput`.
-- Sanitiza a senha.
+- It checks if the email and password fields are not empty.
+- It filters and sanitizes the email using `filter_input` and `sanitizeInput`.
+- It sanitizes the password.
 
-### Verificação de caracteres bloqueados
+### Hashing the password
 
-- Verifica se a senha contém caracteres bloqueados, como medida de segurança contra possíveis ataques, como SQL Injection.
-- Se caracteres bloqueados forem detectados, o usuário é redirecionado de volta para a página de login com uma mensagem de erro.
+The password is converted into a secure hash using the `password_hash` function. This hash is stored in the database.
 
-### Hashing da senha
+### Database query
 
-A senha é convertida em um hash seguro usando a função `password_hash`. Este hash é armazenado no banco de dados.
+- An SQL query is prepared to select the user with the provided email.
+- The email is bound to the query parameter using `bindParam`.
+- The query is executed, and the results are stored in the `$user` variable.
 
-### Consulta ao banco de dados
+### Checking the password and authentication
 
-- Uma consulta SQL é preparada para selecionar o usuário com o email fornecido.
-- O email é vinculado ao parâmetro da consulta usando `bindParam`.
-- A consulta é executada e os resultados são armazenados na variável `$user`.
+If a user with the provided email is found in the database:
 
-### Verificação da senha e autenticação
+- It checks if the password provided by the user matches the hash stored in the database, using `password_verify`.
+- If the passwords match, the user is authenticated:
+  - The user's ID and email are stored in session variables (`$_SESSION['user_id']` and `$_SESSION['user_email']`).
+  - The user is redirected to the system's main page (`../main/index.php`).
+- If the passwords do not match, the user is redirected back to the login page with an error message.
 
-Se um usuário com o email fornecido for encontrado no banco de dados:
+### Error handling
 
-- Verifica se a senha fornecida pelo usuário corresponde ao hash armazenado no banco de dados, usando `password_verify`.
-- Se as senhas corresponderem, o usuário é autenticado:
-  - O ID do usuário e o email são armazenados em variáveis de sessão (`$_SESSION['user_id']` e `$_SESSION['user_email']`).
-  - O usuário é redirecionado para a página principal do sistema (`../main/index.php`).
-- Se as senhas não corresponderem, o usuário é redirecionado de volta para a página de login com uma mensagem de erro.
-
-### Tratamento de erros
-
-- Se o email ou a senha estiverem vazios, o usuário é redirecionado de volta para a página de login com uma mensagem de erro.
-- Se o método da requisição não for POST, o usuário é redirecionado de volta para a página de login com uma mensagem de erro.
-
-### Funções auxiliares
-
-- `blockedChar`: Verifica se a senha contém caracteres bloqueados.
-- `sanitizeInput`: Função para sanitizar os dados de entrada (`trim`, `stripslashes`, `htmlspecialchars`).
+- If the email or password is empty, the user is redirected back to the login page with an error message.
+- If the request method is not POST, the user is redirected back to the login page with an error message.
