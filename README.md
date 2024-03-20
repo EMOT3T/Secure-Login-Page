@@ -19,3 +19,7 @@ Developed in HTML, CSS and PHP, the project includes authentication features and
 ### Password hashing and salting
 
 In the code, the concept of <salt> was implemented for secure password storage and protection against dictionary attacks. The password is converted into a secure hash using the `password_hash` function. This hash is stored in the database along with that user's specific salt.
+
+-----------------------------------
+
+![image](https://github.com/EMOT3T/Secure-LoginPage/assets/158462704/8b4754b8-9e9a-4885-b91f-fd36e51bce57)
